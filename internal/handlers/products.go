@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"example.com/web-server/internal/factories"
-	"example.com/web-server/internal/models"
-	"example.com/web-server/pkg/utils"
+	"github.com/grcatterall/go-web-server/internal/factories"
+	"github.com/grcatterall/go-web-server/internal/models"
+	"github.com/grcatterall/go-web-server/pkg/utils"
 
 	"github.com/gorilla/mux"
 )

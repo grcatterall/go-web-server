@@ -1,4 +1,4 @@
-module example.com/web-server
+module github.com/grcatterall/go-web-server
 
 go 1.22.2
 

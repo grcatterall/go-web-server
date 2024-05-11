@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"example.com/web-server/pkg/utils"
+	"github.com/grcatterall/go-web-server/pkg/utils"
 )
 
 type ResponseFactory struct{}

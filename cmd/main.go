@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"example.com/web-server/internal/handlers"
+	"github.com/grcatterall/go-web-server/internal/handlers"
 
 	"github.com/gorilla/mux"
 )

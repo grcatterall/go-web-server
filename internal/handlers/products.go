@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"example.com/web-server/internal/factories"
 	"example.com/web-server/internal/models"
 	"example.com/web-server/pkg/utils"
 
@@ -17,7 +18,7 @@ var products = []models.Product{
 }
 
 func GetProducts(w http.ResponseWriter, r *http.Request) {
-	rf := utils.NewResponseFactory()
+	rf := factories.NewResponseFactory()
 	defer rf.ResponseDefer(w)
 	jsonResponse, err := utils.ConvertToJson(products)
 
@@ -30,7 +31,7 @@ func GetProducts(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetProductById(w http.ResponseWriter, r *http.Request) {
-	rf := utils.NewResponseFactory()
+	rf := factories.NewResponseFactory()
 	defer rf.ResponseDefer(w)
 
 	vars := mux.Vars(r)

@@ -1,11 +1,11 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"example.com/web-server/internal/models"
 	"example.com/web-server/pkg/utils"
-
 
 	"github.com/gorilla/mux"
 )
@@ -17,19 +17,30 @@ var products = []models.Product{
 }
 
 func GetProducts(w http.ResponseWriter, r *http.Request) {
+	rf := utils.NewResponseFactory()
+	defer rf.ResponseDefer(w)
 	jsonResponse, err := utils.ConvertToJson(products)
 
 	if err != nil {
-        http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
-        return
-    }
+		fmt.Println("Unable to parse products json")
+		panic(utils.ErrorResponse{Code: 500, Msg: "Server error"})
+	}
 
-	utils.JsonResponse(w, jsonResponse)
+	rf.SuccessResponse(w, 200, jsonResponse)
 }
 
 func GetProductById(w http.ResponseWriter, r *http.Request) {
+	rf := utils.NewResponseFactory()
+	defer rf.ResponseDefer(w)
+
 	vars := mux.Vars(r)
 	id := vars["id"]
+
+	if id == "" {
+		panic(utils.ErrorResponse{Code: 400, Msg: "Missing product id"})
+	}
+
+	fmt.Println("Getting product by id")
 
 	var reqProduct models.Product
 
@@ -39,12 +50,22 @@ func GetProductById(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	jsonResponse, err := utils.ConvertToJson(reqProduct)
+	var response []byte
+	var status int
 
-	if err != nil {
-        http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
-        return
-    }
+	if reqProduct.GetName() != "" {
+		jsonResponse, err := utils.ConvertToJson(reqProduct)
 
-	utils.JsonResponse(w, jsonResponse)
+		if err != nil {
+			fmt.Println("Unable to parse products json")
+			panic(utils.ErrorResponse{Code: 500, Msg: "Server error"})
+		}
+
+		response = jsonResponse
+		status = 200
+	} else {
+		panic(utils.ErrorResponse{Code: 404, Msg: fmt.Sprintf("Unable to find product with id %s", id)})
+	}
+
+	rf.SuccessResponse(w, status, response)
 }

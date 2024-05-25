@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=go-ecom
+      - PGUSER=postgres
+    ports:
+      - '5432:5432'
+    command: -p 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -q -d go-ecom -U postgres -p 5432"]
+      interval: 8s
+      timeout: 1s
+      retries: 200
+      start_period: 20s
+    volumes: 
+      - db:/var/lib/postgresql/data
+    networks:
+      - go-ecom-network
+
+  web-server:
+    container_name: go_ecom_backend
+    ports: 
+      - "80:80"
+    # env_file:
+      # - ".env"
+    build:
+      context: .
+      # target: builder
+    depends_on:
+      db:
+        condition: service_healthy
+    command: [ "./web-server" ]
+    networks:
+      - go-ecom-network
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  go-ecom-network:
+    driver: bridge

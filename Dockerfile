@@ -1,9 +1,5 @@
 FROM golang:1.22-bullseye
 
-# BUILDER
-RUN apt-get update -y
-RUN apt-get install -y iputils-ping
-
 WORKDIR /app
 
 COPY go.mod ./

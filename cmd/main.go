@@ -27,5 +27,6 @@ func main() {
 	})
 
 	fmt.Printf("Go running at %s", domain+port)
+	fmt.Println()
 	http.ListenAndServe(port, r)
 }

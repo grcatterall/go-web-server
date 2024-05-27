@@ -13,3 +13,14 @@ Local build:
 cd cmd
 go run .
 ```
+
+Testing
+
+Mocks created using the `mockery` package
+
+```
+brew install mockery
+
+// From root
+mockery --all
+```

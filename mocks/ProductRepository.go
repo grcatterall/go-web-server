@@ -188,7 +188,7 @@ func NewProductRepository(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *MockProductRepository {
-	mock := &MockProductRepository{}
+	mock := &ProductRepository{}
 	mock.Mock.Test(t)
 
 	t.Cleanup(func() { mock.AssertExpectations(t) })

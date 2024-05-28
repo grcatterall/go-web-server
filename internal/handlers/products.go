@@ -12,13 +12,19 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func GetProducts(w http.ResponseWriter, r *http.Request) {
+type ProductHandler struct {
+	Repo repositories.ProductRepository
+}
+
+func NewProductHandler(repo repositories.ProductRepository) *ProductHandler {
+	return &ProductHandler{Repo: repo}
+}
+
+func (ph *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	rf := factories.NewResponseFactory()
 	defer rf.ResponseDefer(w)
 
-	var productRepository repositories.ProductRepository = &repositories.ProductRepo{}
-
-	products, err := productRepository.GetAllProducts()
+	products, err := ph.Repo.GetAllProducts()
 
 	if err != nil {
 		fmt.Println("Unable to parse products json")
@@ -35,7 +41,7 @@ func GetProducts(w http.ResponseWriter, r *http.Request) {
 	rf.SuccessResponse(w, 200, jsonResponse)
 }
 
-func GetProductById(w http.ResponseWriter, r *http.Request) {
+func (ph *ProductHandler) GetProductById(w http.ResponseWriter, r *http.Request) {
 	rf := factories.NewResponseFactory()
 	defer rf.ResponseDefer(w)
 

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/grcatterall/go-web-server/internal/handlers"
+	"github.com/grcatterall/go-web-server/internal/repositories"
 
 	"github.com/gorilla/mux"
 )
@@ -15,8 +16,10 @@ func main() {
 	port := ":80"
 	domain := "http://localhost"
 
-	r.HandleFunc("/products/", handlers.GetProducts).Methods("GET")
-	r.HandleFunc("/product/{id}", handlers.GetProductById).Methods("GET")
+	productHandler := initHandlers()
+
+	r.HandleFunc("/products/", productHandler.GetProducts).Methods("GET")
+	r.HandleFunc("/product/{id}", productHandler.GetProductById).Methods("GET")
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello, you've requested: %s\n", r.URL.Path)
@@ -29,4 +32,12 @@ func main() {
 	fmt.Printf("Go running at %s", domain+port)
 	fmt.Println()
 	http.ListenAndServe(port, r)
+}
+
+func initHandlers() handlers.ProductHandler {
+	var productRepository repositories.ProductRepository = &repositories.ProductRepo{}
+
+	productHandler := handlers.NewProductHandler(productRepository)
+
+	return *productHandler
 }

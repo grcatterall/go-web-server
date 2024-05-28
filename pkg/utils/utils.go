@@ -3,6 +3,8 @@ package utils
 import (
 	"encoding/json"
 	"net/http"
+	"database/sql"
+	"os"
 )
 
 type ErrorResponse struct {
@@ -23,4 +25,15 @@ func JsonResponse(w http.ResponseWriter, json []byte, status int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	w.Write(json)
+}
+
+func DbConnection() *sql.DB {
+	connectionStr := os.Getenv("DATABASE_URL")
+
+	conn, err := sql.Open("postgres", connectionStr)
+	if err != nil {
+		panic(err)
+	}
+
+	return conn
 }

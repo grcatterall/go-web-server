@@ -1,43 +1,26 @@
 package repositories
 
 import (
-	"database/sql"
 	"errors"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/grcatterall/go-web-server/internal/models"
+	"github.com/grcatterall/go-web-server/pkg/utils"
 	_ "github.com/lib/pq"
 )
-
-// var products = []models.Product{
-// 	{ID: "172nw-4719enqlos-4710", Name: "Sun Glasses", Price: 12.99, Description: "Nice shades"},
-// 	{ID: "172nw-4719enqlos-4711", Name: "Jumper", Price: 30.00, Description: "Lovely Jumper"},
-// 	{ID: "172nw-4719enqlos-4712", Name: "Sun Dial", Price: 1099.50, Description: "Tell the time"},
-// }
 
 var ErrProductNotFound = errors.New("product not found")
 
 type ProductRepo struct{}
 
-func dbConnection() *sql.DB {
-	connectionStr := os.Getenv("DATABASE_URL")
-
-	conn, err := sql.Open("postgres", connectionStr)
-	if err != nil {
-		panic(err)
-	}
-
-	return conn
-}
 
 func (r *ProductRepo) GetAllProducts() ([]models.Product, error) {
 	fmt.Println("Getting all products from within repository")
 
 	var products = []models.Product{}
 
-	conn := dbConnection()
+	conn := utils.DbConnection()
 
 	rows, err := conn.Query("SELECT * FROM products")
 

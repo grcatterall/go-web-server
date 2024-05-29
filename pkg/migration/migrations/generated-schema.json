@@ -1,0 +1,13 @@
+{
+    "tables": [
+        {
+            "name": "products",
+            "columns": [
+                {"name": "id", "type": "uuid", "primary_key": true},
+                {"name": "name", "type": "string", "unique": true},
+                {"name": "description", "type": "string", "unique": false},
+                {"name": "price", "type": "float", "unique": false}
+            ]
+        }
+    ]
+}

@@ -26,7 +26,7 @@ type Schema struct {
 }
 
 func main() {
-	newSchema, err := loadSchema("schemas/schema.json")
+	newSchema, err := loadSchema("./schema.json")
 
 	if err != nil {
 		fmt.Println(err)
@@ -35,7 +35,7 @@ func main() {
 
 	fmt.Println("Found schema.json")
 
-	currentSchema, err := loadSchema("schemas/applied-schema.json")
+	currentSchema, err := loadSchema("migrations/generated-schema.json")
 
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
@@ -55,7 +55,7 @@ func main() {
 		return
 	}
 
-	changes = append([]string{"-- THIS DATA HAS BEEN AUTO GENERATED \n"}, changes...)
+	changes = append([]string{"-- THIS DATA HAS BEEN AUTO GENERATED"}, changes...)
 
 	fmt.Printf("SQL Generated - Writing to file")
 	fmt.Println()
@@ -73,7 +73,7 @@ func main() {
 	fmt.Printf("SQL successfully written to '%s'", filepath)
 	fmt.Println()
 
-	schema, err := os.ReadFile("schemas/schema.json")
+	schema, err := os.ReadFile("./schema.json")
 
 	fmt.Printf("Storing new schema")
 	fmt.Println()
@@ -83,7 +83,7 @@ func main() {
 		return
 	}
 
-	err = os.WriteFile("schemas/applied-schema.json", []byte(schema), 0644)
+	err = os.WriteFile("migrations/generated-schema.json", []byte(schema), 0644)
 	if err != nil {
 		fmt.Println("Unable to write to applied schema")
 		return

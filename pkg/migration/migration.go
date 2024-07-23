@@ -14,6 +14,7 @@ type Column struct {
 	Type       string `json:"type"`
 	PrimaryKey bool   `json:"primary_key,omitempty"`
 	Unique     bool   `json:"unique,omitempty"`
+	ForeignKey string `json:"foreign_key,omitempty"`
 }
 
 type Table struct {
@@ -82,8 +83,9 @@ func main() {
 		fmt.Println("Unable to write migration to file")
 		return
 	}
+	fmt.Print(schema)
 
-	err = os.WriteFile("migrations/generated-schema.json", []byte(schema), 0644)
+	// err = os.WriteFile("migrations/generated-schema.json", []byte(schema), 0644)
 	if err != nil {
 		fmt.Println("Unable to write to applied schema")
 		return
@@ -197,9 +199,7 @@ func detectDeletedTables(oldSchema, newSchema *Schema) []string {
 
 func convertType(colType string) (string, error) {
 	switch colType {
-	case "uuid":
-		return colType, nil
-	case "int":
+	case "uuid", "int", "text":
 		return colType, nil
 	case "float":
 		return "float8", nil
@@ -215,6 +215,7 @@ func createNewTable(table Table) string {
 	fmt.Println()
 
 	var columns []string
+	constraintStr := ""
 
 	for _, col := range table.Columns {
 		colType, err := convertType(col.Type)
@@ -234,8 +235,18 @@ func createNewTable(table Table) string {
 			colString = fmt.Sprintf("%s %s %s", col.Name, colType, appendString)
 		}
 
+		if col.ForeignKey != "" {
+			tableColumnPair := strings.Split(col.ForeignKey, "::")
+			fmt.Println(tableColumnPair[0])
+			fmt.Println(tableColumnPair[1])
+			constraintStr = fmt.Sprintf("CONSTRAINT fk_%s_%s \n FOREIGN KEY %s REFERENCES %s(%s)", 
+				tableColumnPair[0], tableColumnPair[1], col.Name, tableColumnPair[0], tableColumnPair[1])
+		}
+
+		fmt.Println(constraintStr)
+
 		columns = append(columns, colString)
 	}
 
-	return fmt.Sprintf("CREATE TABLE \"%s\" (\n\t%s\n);\n", table.Name, strings.Join(columns, ",\n\t"))
+	return fmt.Sprintf("CREATE TABLE \"%s\" (\n\t%s\n%s);\n", table.Name, strings.Join(columns, ",\n\t"), constraintStr)
 }

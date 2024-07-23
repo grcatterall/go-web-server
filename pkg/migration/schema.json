@@ -8,6 +8,13 @@
                 {"name": "description", "type": "string", "unique": false},
                 {"name": "price", "type": "float", "unique": false}
             ]
+        },
+        {
+            "name": "CategoriesToProducts",
+            "columns": [
+                {"name": "id", "type": "uuid", "primary_key": true},
+                {"name": "product_id", "type": "uuid", "primary_key": false, "foreign_key": "products::id"}
+            ]
         }
     ]
 }

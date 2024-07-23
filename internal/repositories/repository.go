@@ -10,3 +10,7 @@ type ProductRepository interface {
 	UpdateProduct(id string, product models.Product) (models.Product, error)
 	DeleteProduct(id string) (bool, error)
 }
+
+type CategoryRepository interface {
+	GetAllCategories() ([]models.Category, error)
+}

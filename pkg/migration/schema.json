@@ -6,14 +6,16 @@
                 {"name": "id", "type": "uuid", "primary_key": true},
                 {"name": "name", "type": "string", "unique": true},
                 {"name": "description", "type": "string", "unique": false},
-                {"name": "price", "type": "float", "unique": false}
+                {"name": "price", "type": "float", "unique": false},
+                {"name": "slug", "type": "string", "unique": true}
             ]
         },
         {
             "name": "CategoriesToProducts",
             "columns": [
                 {"name": "id", "type": "uuid", "primary_key": true},
-                {"name": "product_id", "type": "uuid", "primary_key": false, "foreign_key": "products::id"}
+                {"name": "product_id", "type": "uuid", "primary_key": false, "foreign_key": "products::id"},
+                {"name": "category_id", "type": "uuid", "primary_key": false, "foreign_key": "products::id"}
             ]
         }
     ]

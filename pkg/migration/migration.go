@@ -85,7 +85,7 @@ func main() {
 	}
 	fmt.Print(schema)
 
-	// err = os.WriteFile("migrations/generated-schema.json", []byte(schema), 0644)
+	err = os.WriteFile("migrations/generated-schema.json", []byte(schema), 0644)
 	if err != nil {
 		fmt.Println("Unable to write to applied schema")
 		return
@@ -239,7 +239,7 @@ func createNewTable(table Table) string {
 			tableColumnPair := strings.Split(col.ForeignKey, "::")
 			fmt.Println(tableColumnPair[0])
 			fmt.Println(tableColumnPair[1])
-			constraintStr = fmt.Sprintf("CONSTRAINT fk_%s_%s \n FOREIGN KEY %s REFERENCES %s(%s)", 
+			constraintStr = fmt.Sprintf("CONSTRAINT fk_%s_%s \n FOREIGN KEY (%s) REFERENCES %s (%s)", 
 				tableColumnPair[0], tableColumnPair[1], col.Name, tableColumnPair[0], tableColumnPair[1])
 		}
 

@@ -43,4 +43,5 @@ volumes:
 
 networks:
   go-ecom-network:
+    name: go-ecom-network
     driver: bridge

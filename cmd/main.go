@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/grcatterall/go-web-server/internal/handlers"
 	"github.com/grcatterall/go-web-server/internal/repositories"
@@ -11,6 +12,10 @@ import (
 )
 
 func main() {
+	if os.Getenv("RUN_MIGRATIONS") == "true" {
+		fmt.Println("test")
+	}
+
 	r := mux.NewRouter()
 
 	port := ":80"

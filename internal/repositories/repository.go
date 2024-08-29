@@ -13,4 +13,6 @@ type ProductRepository interface {
 
 type CategoryRepository interface {
 	GetAllCategories() ([]models.Category, error)
+	GetCategoryById(id string) (models.Category, error)
+	GetCategoryByName(name string) (models.Category, error)
 }
